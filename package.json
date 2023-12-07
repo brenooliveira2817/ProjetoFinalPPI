@@ -1,0 +1,32 @@
+{
+  "name": "projetofinalppi",
+  "version": "1.0.0",
+  "description": "Desenvolvimento de sistema web para uma sala de bate-papo",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brenooliveira2817/ProjetoFinalPPI.git"
+  },
+  "keywords": [
+    "HTTP",
+    "POST",
+    "Validação",
+    "Servidor"
+  ],
+  "author": "Breno Oliveira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brenooliveira2817/ProjetoFinalPPI/issues"
+  },
+  "homepage": "https://github.com/brenooliveira2817/ProjetoFinalPPI#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3"
+  }
+}
