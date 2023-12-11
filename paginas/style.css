@@ -31,12 +31,13 @@
     box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
   }
   .top_menu .buttons {
-    margin: 3px 0 0 20px;
     position: absolute;
+    right: 30px; /* Define a posição do canto esquerdo */
+    top: 15px; /* Ajuste conforme necessário */
   }
   .top_menu .buttons .button {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     display: inline-block;
     margin-right: 10px;
@@ -44,12 +45,7 @@
   }
   .top_menu .buttons .button.close {
     background-color: #f5886e;
-  }
-  .top_menu .buttons .button.minimize {
-    background-color: #fdbf68;
-  }
-  .top_menu .buttons .button.maximize {
-    background-color: #a3d063;
+    margin-left: 10px;
   }
   .top_menu .title {
     text-align: center;
@@ -171,14 +167,9 @@
   }
   .bottom_wrapper .send_message {
     width: 140px;
+    padding-top: 10px;
     height: 50px;
     display: block;
-    border-radius: 50px;
-    background-color: #a3d063;
-    border: 2px solid #a3d063;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.2s linear;
     text-align: center;
     float: right;
   }

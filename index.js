@@ -67,15 +67,15 @@ function processarCadastroUsuario(requisicao, resposta) {
                                     <div class="input-group has-validation">
                                         <span class="input-group-text" id="inputGroupPrepend3">@</span>
                                         <input type="text" class="form-control" id="nickname" name="nickname" value="${dados.nickname || ''}" placeholder="ex.: brenooliveira" required>
-                                        ${!dados.nickname ? '<p class="text-danger">Por favor, informe seu Apelido!</p>' : ''}
                                     </div>
+                                    ${!dados.nickname ? '<p class="text-danger">Por favor, informe seu Apelido!</p>' : ''}
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="datanasc" style="color: #296656;" class="form-label"><b>Data de Nascimento</b></label>
-                                    <input type="text" class="form-control" id="datanasc" name="datanasc" value="${dados.datanasc || ''}" placeholder="ex.: 17/10/1998" required>
+                                <label for="datanasc" style="color: #296656;" class="form-label"><b>Data de Nascimento</b></label>
+                                <div>
+                                    <input type="date" name="datanasc" id="datanasc" class="form-control" value="${dados.datanasc || ''}"/>
                                     ${!dados.datanasc ? '<p class="text-danger">Por favor, informe sua data de nascimento!</p>' : ''}
                                 </div>
                             </div>
@@ -166,6 +166,10 @@ function processarCadastroUsuario(requisicao, resposta) {
                 }
                 td {
                     color: black; /* Ajuste para a cor do texto */
+                }
+                table {
+                    border-radius: 10px; /* Ajuste conforme necessário */
+                    overflow: hidden; /* Garante que os cantos sejam arredondados */
                 }
             </style>
         </head>
