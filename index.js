@@ -359,21 +359,40 @@ function processarMensagem(requisicao, resposta, listaUsuarios) {
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
             <style>
                 body {
-                    background-image: url('wallpapper.jpeg');
-                    background-size: cover;
-                    background-repeat: no-repeat;
+                    margin: 0;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    height: 100vh;
-                    margin: 0;
+                    min-height: 100vh;
+                    background-image: url('wallpapper.jpeg');
+                    background-size: cover;
+                    background-repeat: no-repeat;
                 }
-                .chat-container {
-                    width: 400px;
+                .chat-wrapper {
+                    width: 700px;
+                    padding: 20px;
+                    background-color: #a0cbbf;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                    display: flex;
+                    flex-direction: column;
+                }
+                .title {
+                    background-color: #296656;
+                    color: white;
+                    padding: 10px;
+                    text-align: center;
+                    border-top-left-radius: 10px;
+                    border-top-right-radius: 10px;
+                }
+                .message-area {
+                    flex: 1;
                     border: 1px solid #ccc;
                     border-radius: 5px;
                     padding: 20px;
-                    background-color: #a0cbbf;
+                    background-color: #f9f9f9;
+                    margin-bottom: 20px;
+                    overflow-y: auto;
                 }
                 .message-list {
                     list-style: none;
@@ -386,25 +405,60 @@ function processarMensagem(requisicao, resposta, listaUsuarios) {
                     border-radius: 5px;
                     background-color: #f9f9f9;
                 }
+                .form-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .form-container select,
+                .form-container button {
+                    flex: 1;
+                    margin-right: 10px;
+                }
+                .form-container input {
+                    flex: 2;
+                    margin-right: 10px;
+                }
             </style>
         </head>
         <body>
-            <div class="chat-container">
-                <ul class="message-list"></ul>
-                <form action="/postarMensagem" method="POST">
-                    <div class="d-flex">
-                        <select class="form-select me-2 user-select" aria-label="Default select example" name="user" id="user">
-                            <option selected disabled value="">Selecione um usuário</option>
-                            ${listaUsuarios.map(usuario => `<option value="${usuario.nome}">${usuario.nome}</option>`).join('')}
-                        </select>
-                        ${!dados.user ? '<p class="text-danger">Por favor, selecione um usuario!</p>' : ''}
 
-                        <input type="text" class="form-control me-2 message-input" name="mensagem" id="mensagem" value="${dados.mensagem || ''} placeholder="Digite sua mensagem">
-                        ${!dados.mensagem ? '<p class="text-danger">Por favor, digite sua mensagem!</p>' : ''}
-                        <button class="btn btn-success">Enviar</button>
+            <div class="chat-wrapper">
+                <form action='/postarMensagem' method='POST'>
+                    <div class="title">
+                        <h1 class="display-4"><b>Bate <span style="color: #a0cbbf;">Papo</span></b></h1>
+                    </div>
+            
+                    <div class="message-area">
+                        <ul class="message-list"></ul>
+                    </div>
+            
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <select class="form-select user-select" aria-label="Default select example" name="user" id="user">
+                                    <option selected disabled value="">Selecionar Usuário</option>
+                                    ${listaUsuarios.map(usuario => `<option value="${usuario.nome}">${usuario.nome}</option>`).join('')}
+                                </select>
+                                    ${!dados.user ? '<p class="text-danger">Selecione um usuário!</p>' : ''}
+                            </div>
+                        </div>
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control message-input" name="mensagem" id="mensagem" placeholder="Digite sua mensagem">
+                                    ${!dados.mensagem ? '<p class="text-danger">Por favor, digite sua mensagem!</p>' : ''}
+                                </div>
+                            </div>
+                        <div class="col-md-4">
+                            <a class="btn btn-danger" href="/" role="button" style="text-align: center; width: 100%;">Voltar</a>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-success" style="width: 100%;">Enviar</button>
+                        </div>
                     </div>
                 </form>
             </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
         </body>
         </html>
@@ -412,7 +466,6 @@ function processarMensagem(requisicao, resposta, listaUsuarios) {
         resposta.end(conteudoResposta);
     }
     else {
-        // Se os dados estão válidos, adicionar a nova mensagem à lista
         const novaMensagem = {
             usuario: dados.user,
             mensagem: dados.mensagem,
@@ -421,32 +474,50 @@ function processarMensagem(requisicao, resposta, listaUsuarios) {
 
         listaMensagens.push(novaMensagem);
 
-        // Aqui você pode redirecionar ou enviar a página com as mensagens atualizadas
-        // Por exemplo, renderizando novamente a página com as mensagens
         conteudoResposta = `
         <!DOCTYPE html>
         <html lang="pt-br">
         <head>
             <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Chat</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
             <style>
                 body {
-                    background-image: url('wallpapper.jpeg');
-                    background-size: cover;
-                    background-repeat: no-repeat;
+                    margin: 0;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    height: 100vh;
-                    margin: 0;
+                    min-height: 100vh;
+                    background-image: url('wallpapper.jpeg');
+                    background-size: cover;
+                    background-repeat: no-repeat;
                 }
-                .chat-container {
-                    width: 400px;
+                .chat-wrapper {
+                    width: 700px;
+                    padding: 20px;
+                    background-color: #a0cbbf;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                    display: flex;
+                    flex-direction: column;
+                }
+                .title {
+                    background-color: #296656;
+                    color: white;
+                    padding: 10px;
+                    text-align: center;
+                    border-top-left-radius: 10px;
+                    border-top-right-radius: 10px;
+                }
+                .message-area {
+                    flex: 1;
                     border: 1px solid #ccc;
                     border-radius: 5px;
                     padding: 20px;
-                    background-color: #a0cbbf;
+                    background-color: #f9f9f9;
+                    margin-bottom: 20px;
+                    overflow-y: auto;
                 }
                 .message-list {
                     list-style: none;
@@ -459,31 +530,68 @@ function processarMensagem(requisicao, resposta, listaUsuarios) {
                     border-radius: 5px;
                     background-color: #f9f9f9;
                 }
+                .form-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .form-container select,
+                .form-container button {
+                    flex: 1;
+                    margin-right: 10px;
+                }
+                .form-container input {
+                    flex: 2;
+                    margin-right: 10px;
+                }
             </style>
         </head>
         <body>
 
-            <div class="chat-container">
-                <ul class="message-list">
-                    ${listaMensagens.map(mensagem => `
-                    <li>
-                        <p><strong>Usuário:</strong> ${mensagem.usuario}</p>
-                        <p><strong>Mensagem:</strong> ${mensagem.mensagem}</p>
-                        <p><strong>Data/Hora:</strong> ${mensagem.dataHora}</p>
-                    </li>
-                    `).join('')}
-                </ul>
-                <form action="/postarMensagem" method="POST">
-                    <div class="d-flex">
-                        <select class="form-select me-2 user-select" aria-label="Default select example" name="user" id="user">
-                            <option selected disabled value="">Selecione um usuário</option>
-                        </select>
-
-                        <input type="text" class="form-control me-2 message-input" name="mensagem" id="mensagem" placeholder="Digite sua mensagem">
-                        <button class="btn btn-success">Enviar</button>
+            <div class="chat-wrapper">
+                <form action='/postarMensagem' method='POST'>
+                    <div class="title">
+                        <h1 class="display-4"><b>Bate <span style="color: #a0cbbf;">Papo</span></b></h1>
+                    </div>
+            
+                    <div class="message-area">
+                        <ul class="message-list" style="list-style: none;"></ul>
+                            ${listaMensagens.map(mensagem => `
+                            <li style="list-style: none;">
+                                <p><strong>Usuário:</strong> ${mensagem.usuario}</p>
+                                <p><strong>Mensagem:</strong> ${mensagem.mensagem}</p>
+                                <p><strong>Data/Hora:</strong> ${mensagem.dataHora}</p>
+                            </li>
+                            <br>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <select class="form-select user-select" aria-label="Default select example" name="user" id="user">
+                                    <option selected disabled value="">Selecionar Usuário</option>
+                                    ${listaUsuarios.map(usuario => `<option value="${usuario.nome}">${usuario.nome}</option>`).join('')}
+                                </select>
+                                    ${!dados.user ? '<p class="text-danger">Selecione um usuário!</p>' : ''}
+                            </div>
+                        </div>
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control message-input" name="mensagem" id="mensagem" placeholder="Digite sua mensagem">
+                                    ${!dados.mensagem ? '<p class="text-danger">Por favor, digite sua mensagem!</p>' : ''}
+                                </div>
+                            </div>
+                        <div class="col-md-4">
+                            <a class="btn btn-danger" href="/" role="button" style="text-align: center; width: 100%;">Voltar</a>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-success" style="width: 100%;">Enviar</button>
+                        </div>
                     </div>
                 </form>
             </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
         </body>
         </html>
