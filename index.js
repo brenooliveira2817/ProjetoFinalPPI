@@ -6,7 +6,8 @@ import session from 'express-session';
 const porta = 3000;
 const host =  '0.0.0.0';
 
-var listaUsuarios = [];
+const listaUsuarios = [];
+const listaMensagens = [];
 
 function processarCadastroUsuario(requisicao, resposta) {
     const dados = requisicao.body;
@@ -343,7 +344,159 @@ app.post('/login', (requisicao, resposta)=>{
     }
 });
 
+function processarMensagem(requisicao, resposta, listaUsuarios) {
+    const dados = requisicao.body;
+    let conteudoResposta = '';
+
+    if (!(dados.user && dados.mensagem)) {
+        conteudoResposta = `
+        <!DOCTYPE html>
+        <html lang="pt-br">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Chat</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+            <style>
+                body {
+                    background-image: url('wallpapper.jpeg');
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                }
+                .chat-container {
+                    width: 400px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    padding: 20px;
+                    background-color: #a0cbbf;
+                }
+                .message-list {
+                    list-style: none;
+                    padding: 0;
+                }
+                .message-list li {
+                    margin-bottom: 10px;
+                    border: 1px solid #eee;
+                    padding: 5px;
+                    border-radius: 5px;
+                    background-color: #f9f9f9;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="chat-container">
+                <ul class="message-list"></ul>
+                <form action="/postarMensagem" method="POST">
+                    <div class="d-flex">
+                        <select class="form-select me-2 user-select" aria-label="Default select example" name="user" id="user">
+                            <option selected disabled value="">Selecione um usuário</option>
+                            ${listaUsuarios.map(usuario => `<option value="${usuario.nome}">${usuario.nome}</option>`).join('')}
+                        </select>
+                        ${!dados.user ? '<p class="text-danger">Por favor, selecione um usuario!</p>' : ''}
+
+                        <input type="text" class="form-control me-2 message-input" name="mensagem" id="mensagem" value="${dados.mensagem || ''} placeholder="Digite sua mensagem">
+                        ${!dados.mensagem ? '<p class="text-danger">Por favor, digite sua mensagem!</p>' : ''}
+                        <button class="btn btn-success">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        </body>
+        </html>
+        `;
+        resposta.end(conteudoResposta);
+    }
+    else {
+        // Se os dados estão válidos, adicionar a nova mensagem à lista
+        const novaMensagem = {
+            usuario: dados.user,
+            mensagem: dados.mensagem,
+            dataHora: new Date().toLocaleString()
+        };
+
+        listaMensagens.push(novaMensagem);
+
+        // Aqui você pode redirecionar ou enviar a página com as mensagens atualizadas
+        // Por exemplo, renderizando novamente a página com as mensagens
+        conteudoResposta = `
+        <!DOCTYPE html>
+        <html lang="pt-br">
+        <head>
+            <meta charset="UTF-8">
+            <title>Chat</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+            <style>
+                body {
+                    background-image: url('wallpapper.jpeg');
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                }
+                .chat-container {
+                    width: 400px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    padding: 20px;
+                    background-color: #a0cbbf;
+                }
+                .message-list {
+                    list-style: none;
+                    padding: 0;
+                }
+                .message-list li {
+                    margin-bottom: 10px;
+                    border: 1px solid #eee;
+                    padding: 5px;
+                    border-radius: 5px;
+                    background-color: #f9f9f9;
+                }
+            </style>
+        </head>
+        <body>
+
+            <div class="chat-container">
+                <ul class="message-list">
+                    ${listaMensagens.map(mensagem => `
+                    <li>
+                        <p><strong>Usuário:</strong> ${mensagem.usuario}</p>
+                        <p><strong>Mensagem:</strong> ${mensagem.mensagem}</p>
+                        <p><strong>Data/Hora:</strong> ${mensagem.dataHora}</p>
+                    </li>
+                    `).join('')}
+                </ul>
+                <form action="/postarMensagem" method="POST">
+                    <div class="d-flex">
+                        <select class="form-select me-2 user-select" aria-label="Default select example" name="user" id="user">
+                            <option selected disabled value="">Selecione um usuário</option>
+                        </select>
+
+                        <input type="text" class="form-control me-2 message-input" name="mensagem" id="mensagem" placeholder="Digite sua mensagem">
+                        <button class="btn btn-success">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        </body>
+        </html>
+        `;
+        resposta.end(conteudoResposta);
+    }
+}
+
 app.post('/cadastrarUsuario', autenticar, processarCadastroUsuario);
+
+app.post('/postarMensagem', autenticar, (requisicao, resposta) => {
+    processarMensagem(requisicao, resposta, listaUsuarios);
+});
 
 app.listen(porta, host, () => {
     console.log(`Servidor executando na url https://${host}:${porta}`)
