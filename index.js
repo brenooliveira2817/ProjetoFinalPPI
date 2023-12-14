@@ -20,7 +20,7 @@ function processarCadastroUsuario(requisicao, resposta) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Cadastro Aluno</title>
+            <title>Cadastro Usuario</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
             <style>
@@ -105,8 +105,20 @@ function processarCadastroUsuario(requisicao, resposta) {
                                 </div>
                             </div>
 
-                            <div class="col-md-12 text-center">
-                                <button class="btn btn-success" type="submit">Cadastrar</button>
+                            <div class="col-md-6 mx-auto" style="padding-top: 20px;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-3 d-grid gap-2">
+                                        <a href="/" class="btn btn-danger">Voltar</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <div class="mb-3 d-grid gap-2">
+                                        <button class="btn btn-success" type="submit">Cadastrar</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -136,7 +148,7 @@ function processarCadastroUsuario(requisicao, resposta) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Alunos Cadastrados</title>
+            <title>Usuarios Cadastrados</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
             <style>
                 body {
@@ -273,11 +285,22 @@ app.get('/', autenticar, (requisicao, resposta) =>{
                 border-radius: 10px;
                 padding: 20px;
                 color: black;
+                position: relative;
+            }
+            .close-button {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                font-size: 20px;
+                color: #296656;
+                background: none;
+                border: none;
             }
             </style>
         </head>
         <body>
         <div class="container col-4 custom-div">
+            <a class="btn btn-danger close-button" href="/login.html" role="button"><b>X</b></a>
             <h1 style="color: #296656;">Menu</h1>
             <nav class="nav flex-column">
                 <a style="font-size: 30px;" class="nav-link" href="/cadastroUsuario.html">Cadastro de Usuários</a>
@@ -355,7 +378,7 @@ function processarMensagem(requisicao, resposta, listaUsuarios) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Chat</title>
+            <title>Bate-Papo</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
             <style>
                 body {
@@ -430,7 +453,16 @@ function processarMensagem(requisicao, resposta, listaUsuarios) {
                     </div>
             
                     <div class="message-area">
-                        <ul class="message-list"></ul>
+                        <ul class="message-list" style="list-style: none;">
+                            ${listaMensagens.map(mensagem => `
+                                <li style="list-style: none;">
+                                    <p><strong>Usuário:</strong> ${mensagem.usuario}</p>
+                                    <p><strong>Mensagem:</strong> ${mensagem.mensagem}</p>
+                                    <p><strong>Postado em:</strong> ${mensagem.dataHora}</p>
+                                </li>
+                                <br>
+                            `).join('')}
+                        </ul>
                     </div>
             
                     <div class="row">
@@ -480,7 +512,7 @@ function processarMensagem(requisicao, resposta, listaUsuarios) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Chat</title>
+            <title>Bate-papo</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
             <style>
                 body {
@@ -560,7 +592,7 @@ function processarMensagem(requisicao, resposta, listaUsuarios) {
                             <li style="list-style: none;">
                                 <p><strong>Usuário:</strong> ${mensagem.usuario}</p>
                                 <p><strong>Mensagem:</strong> ${mensagem.mensagem}</p>
-                                <p><strong>Data/Hora:</strong> ${mensagem.dataHora}</p>
+                                <p><strong>Postado em:</strong> ${mensagem.dataHora}</p>
                             </li>
                             <br>
                             `).join('')}
