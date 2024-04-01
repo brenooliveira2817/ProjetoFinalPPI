@@ -305,6 +305,7 @@ app.get('/', autenticar, (requisicao, resposta) =>{
             <nav class="nav flex-column">
                 <a style="font-size: 30px;" class="nav-link" href="/cadastroUsuario.html">Cadastro de Usuários</a>
                 <a style="font-size: 30px;" class="nav-link" href="/batePapo.html">Bate-papo</a>
+                <a style="font-size: 30px;" class="nav-link" href="http://drive.google.com/u/0/uc?id=1qxDbV8itDC1rVUSDIr7KwkhH_GOp1b7E&export=download">Baixar</a>
             </nav>
             <br>
             <footer>
